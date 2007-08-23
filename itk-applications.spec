@@ -1,7 +1,7 @@
 
 %define name	itk-applications
 %define version	2.0.0
-%define release	%mkrel 1
+%define release	%mkrel 2
 
 Summary:	Medicine Insight Segmentation and Registration
 Name:		%{name}
