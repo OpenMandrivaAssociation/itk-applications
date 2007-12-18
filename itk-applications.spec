@@ -11,7 +11,7 @@ License:	BSDish
 Group:		Sciences/Other
 URL:		http://www.itk.org
 Source0:	http://belnet.dl.sourceforge.net/sourceforge/itk/InsightApplications-%{version}.tar.bz2
-BuildRequires:	cmake gcc-c++ itk-devel vtk-devel fltk-devel qt3-devel
+BuildRequires:	cmake gcc-c++ itk-devel vtk-devel fltk-devel qt3-devel fftw3-devel
 BuildRequires:	cableswig python-itk tcl-itk python-vtk tcl-vtk
 
 %description
