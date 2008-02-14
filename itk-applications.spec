@@ -9,6 +9,7 @@ Version:	%{version}
 Release:	%{release}
 License:	BSDish
 Group:		Sciences/Other
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 URL:		http://www.itk.org
 Source0:	http://belnet.dl.sourceforge.net/sourceforge/itk/InsightApplications-%{version}.tar.bz2
 BuildRequires:	cmake gcc-c++ itk-devel vtk-devel fltk-devel qt3-devel fftw3-devel
