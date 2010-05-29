@@ -1,7 +1,8 @@
+%define		name		itk-applications
+%define		version		3.16.0
+%define		release		%mkrel 1
 
-%define name	itk-applications
-%define version	2.0.0
-%define release	%mkrel 4
+%define		itkver		3.16
 
 Summary:	Medicine Insight Segmentation and Registration
 Name:		%{name}
@@ -9,11 +10,24 @@ Version:	%{version}
 Release:	%{release}
 License:	BSDish
 Group:		Sciences/Other
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 URL:		http://www.itk.org
-Source0:	http://belnet.dl.sourceforge.net/sourceforge/itk/InsightApplications-%{version}.tar.bz2
-BuildRequires:	cmake gcc-c++ itk-devel vtk-devel fltk-devel qt3-devel fftw3-devel
-BuildRequires:	cableswig python-itk tcl-itk python-vtk tcl-vtk
+Source0:	http://belnet.dl.sourceforge.net/sourceforge/itk/InsightApplications-%{version}.tar.gz
+BuildRequires:	cmake
+BuildRequires:	itk-devel
+BuildRequires:	vtk-devel
+BuildRequires:	fltk-devel
+BuildRequires:	qt4-devel
+BuildRequires:	fftw3-devel
+BuildRequires:	cableswig
+BuildRequires:	python-itk
+BuildRequires:	python-vtk-devel
+BuildRequires:	tcl-itk
+BuildRequires:	tcl-vtk-devel
+
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
+
+# FIXME the last portion of the patch is ugly, i.e. s/libitkfoo/libitkfooD/
+Patch0:		InsightApplications-3.16.0-build.patch
 
 %description
 The following applications illustrate the use of ITK in real-world medical
@@ -22,35 +36,25 @@ InsightApplications module. They differ from the Insight/Examples examples in
 that they use other systems such as VTK, FLTK and Qt to create turn-key
 applications. 
 
-%package -n python-ConnectVTKITK
-Group:          Development/Python
-Summary:        VTK ITK python connection
-Requires:	python-vtk python-itk
+%files
+%defattr(0644,root,root,0755)
+%{_bindir}/*
+%{_libdir}/*
 
-%description -n python-ConnectVTKITK
-VTK ITK python connection
+#------------------------------------------------------------------------
+%package	devel
+Group:		Development/Other
+Summary:	itk applications development files
 
-%files -n python-ConnectVTKITK
-%defattr(-,root,root,0755)
-%{_libdir}/InsightToolkit/python/*
-%{_libdir}/InsightToolkit/*Python.so
+%description	devel
+itk applications development files
 
-# %package -n tcl-ConnectVTKITK
-# Group:          Development/Other
-# Summary:        VTK ITK tcl connection
-# Requires:       tcl-vtk tcl-itk
-# 
-# %description -n tcl-ConnectVTKITK
-# VTK ITK tcl connection
-# 
-# %files -n tcl-ConnectVTKITK
-# %{_libdir}/InsightToolkit/tcl/*
-# %{_libdir}/InsightToolkit/*Tcl.so
+%files		devel
+%defattr(0644,root,root,0755)
+%{_includedir}*
 
-
-
+#------------------------------------------------------------------------
 %prep
-
 %setup -q -n InsightApplications-%{version}
 
 # remove some applications
@@ -59,59 +63,37 @@ VTK ITK python connection
 mv CMakeLists.txt CMakeLists.sav
 egrep -v 'LandmarkInitializedMutualInformationRegistration|SNAP|DeformableModelSimplexMesh|CellularSegmentation' CMakeLists.sav > CMakeLists.txt
 
-
-
-
 # remove CVS dirs
 find -name CVS -type d | xargs rm -rf
 
+%patch0 -p1
+
+#------------------------------------------------------------------------
 %build
-
-
-cmake -DCMAKE_INSTALL_PREFIX:PATH=%{_prefix} \
-      -DBUILD_SHARED_LIBS:BOOL=ON \
-      -DBUILD_DOXYGEN:BOOL=ON \
-      -DBUILD_TESTING:BOOL=ON \
-      -DCMAKE_CXX_FLAGS:STRING="$RPM_OPT_FLAGS" \
-      -DCMAKE_C_FLAGS:STRING="$RPM_OPT_FLAGS" \
-      -DCMAKE_SKIP_RPATH:BOOL=ON \
-      -DCMAKE_EXE_LINKER_FLAGS:STRING="-L/usr/lib/InsightToolkit -L/usr/lib/vtk/python/" \
-      -DCMAKE_MODULE_LINKER_FLAGS:STRING="-L/usr/lib/InsightToolkit -L/usr/lib/vtk/python/" \
-      -DCMAKE_SHARED_LINKER_FLAGS:STRING="-L/usr/lib/InsightToolkit -L/usr/lib/vtk/python/" \
-      -DUSE_FLTK:BOOL=ON \
-      -DUSE_VTK:BOOL=ON \
-.
-      
+(
+%cmake	-DCMAKE_INSTALL_PREFIX:PATH=%{_prefix} \
+	-DBUILD_SHARED_LIBS:BOOL=ON \
+	-DBUILD_DOXYGEN:BOOL=ON \
+	-DBUILD_TESTING:BOOL=ON \
+	-DCMAKE_CXX_FLAGS:STRING="%{optflags}" \
+	-DCMAKE_C_FLAGS:STRING="%{optflags}" \
+	-DCMAKE_SKIP_RPATH:BOOL=ON \
+	-DCMAKE_EXE_LINKER_FLAGS:STRING="-L%{_libdir}/InsightToolkit -L%{_libdir}/vtk/python/" \
+	-DCMAKE_MODULE_LINKER_FLAGS:STRING="-L%{_libdir}/InsightToolkit -L%{_libdir}/vtk/python/" \
+	-DCMAKE_SHARED_LINKER_FLAGS:STRING="-L%{_libdir}/InsightToolkit -L%{_libdir}/vtk/python/" \
+	-DUSE_FLTK:BOOL=ON \
+	-DUSE_VTK:BOOL=ON \
+	-DITK_DIR:PATH=%{_libdir}/itk-%{itkver}
 %make
+)
 
-
+#------------------------------------------------------------------------
 %install
-[ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
+%makeinstall_std -C build
+%ifarch x86_64 ppc64
+  mv -f %{buildroot}%{_prefix}/lib %{buildroot}%{_libdir}
+%endif
 
-# 
-# make install does quite nothing
-# everything needs to be done here :-(
-#
-
-# Create base dirs
-
-mkdir -p $RPM_BUILD_ROOT/%{_libdir}/InsightToolkit/python
-# mkdir -p $RPM_BUILD_ROOT/%{_libdir}/InsightToolkit/tcl
-# mkdir -p $RPM_BUILD_ROOT/%{_libdir}/vtk/python
-# mkdir -p $RPM_BUILD_ROOT/%{_libdir}/vtk/tcl
-# mkdir -p $RPM_BUILD_ROOT/%{_includedir}
-
-#
-# ConnectVTKITK
-#
-
-cd ConnectVTKITK/
-cp *.py* $RPM_BUILD_ROOT/%{_libdir}/InsightToolkit/python
-# cp pkgIndex.tcl $RPM_BUILD_ROOT/%{_libdir}/InsightToolkit/tcl
-cp *Python.so $RPM_BUILD_ROOT/%{_libdir}/InsightToolkit
-
-
+#------------------------------------------------------------------------
 %clean
-rm -rf $RPM_BUILD_ROOT
-
-
+rm -rf %{buildroot}
