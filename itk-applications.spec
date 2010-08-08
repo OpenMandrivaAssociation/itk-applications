@@ -12,17 +12,18 @@ License:	BSDish
 Group:		Sciences/Other
 URL:		http://www.itk.org
 Source0:	http://belnet.dl.sourceforge.net/sourceforge/itk/InsightApplications-%{version}.tar.gz
-BuildRequires:	cmake
-BuildRequires:	itk-devel
-BuildRequires:	vtk-devel
-BuildRequires:	fltk-devel
-BuildRequires:	qt4-devel
-BuildRequires:	fftw3-devel
 BuildRequires:	cableswig
+BuildRequires:	cmake
+BuildRequires:	fftw3-devel
+BuildRequires:	fltk-devel
+BuildRequires:	itk-devel
+BuildRequires:	libuuid-devel
 BuildRequires:	python-itk
 BuildRequires:	python-vtk-devel
+BuildRequires:	qt4-devel
 BuildRequires:	tcl-itk
 BuildRequires:	tcl-vtk-devel
+BuildRequires:	vtk-devel
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
