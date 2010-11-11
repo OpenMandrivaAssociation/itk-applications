@@ -1,6 +1,6 @@
 %define		name		itk-applications
 %define		version		3.20.0
-%define		release		%mkrel 1
+%define		release		%mkrel 2
 
 %define		itkver		3.20
 
