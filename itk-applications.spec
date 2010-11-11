@@ -30,6 +30,8 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 # FIXME the last portion of the patch is ugly, i.e. s/libitkfoo/libitkfooD/
 Patch0:		InsightApplications-3.16.0-build.patch
 
+Patch1:		itk-applications-gcc4.5.1.patch
+
 %description
 The following applications illustrate the use of ITK in real-world medical
 imaging applications. Note these application are found in the
@@ -68,6 +70,7 @@ egrep -v 'LandmarkInitializedMutualInformationRegistration|SNAP|DeformableModelS
 find -name CVS -type d | xargs rm -rf
 
 %patch0 -p1
+%patch1 -p1
 
 #------------------------------------------------------------------------
 %build
