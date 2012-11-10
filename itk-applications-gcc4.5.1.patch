@@ -1,0 +1,35 @@
+diff -p -up InsightApplications-3.20.0/Auxiliary/FltkImageViewer/GLSliceView.h.orig InsightApplications-3.20.0/Auxiliary/FltkImageViewer/GLSliceView.h
+--- InsightApplications-3.20.0/Auxiliary/FltkImageViewer/GLSliceView.h.orig	2010-11-11 23:14:20.000000000 +0000
++++ InsightApplications-3.20.0/Auxiliary/FltkImageViewer/GLSliceView.h	2010-11-11 23:43:36.000000000 +0000
+@@ -75,7 +75,10 @@ public:
+   
+   /*! Specify the 3D image to view slice by slice */
+   virtual void SetInputImage(ImageType * newImData);
+-  virtual const ImagePointer & GetInputImage(void) const;
++  virtual const ImagePointer & GetInputImage(void) const
++  {
++  return this->cImData;
++  }
+   
+   /*! Specify the 3D image to view as an overlay */
+   void SetInputOverlay(OverlayType * newOverlayData);
+@@ -291,19 +294,6 @@ SetInputImage(ImageType * newImData)
+ 
+ 
+ 
+-
+-//
+-//
+-template <class ImagePixelType, class OverlayPixelType>
+-const typename Image<ImagePixelType,3>::Pointer &
+-GLSliceView<ImagePixelType, OverlayPixelType>
+-::GetInputImage(void) const
+-  {
+-  return this->cImData;
+-  }
+-
+-
+-
+ //
+ //
+ template <class ImagePixelType, class OverlayPixelType>

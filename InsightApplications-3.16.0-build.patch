@@ -1,0 +1,488 @@
+diff -p -up InsightApplications-3.16.0/Auxiliary/ITKFlFileWriter/Fl_File_ChooserModified2.cxx.orig InsightApplications-3.16.0/Auxiliary/ITKFlFileWriter/Fl_File_ChooserModified2.cxx
+--- InsightApplications-3.16.0/Auxiliary/ITKFlFileWriter/Fl_File_ChooserModified2.cxx.orig	2010-05-28 18:09:40.718330105 -0300
++++ InsightApplications-3.16.0/Auxiliary/ITKFlFileWriter/Fl_File_ChooserModified2.cxx	2010-05-28 18:54:51.939326524 -0300
+@@ -78,7 +78,11 @@ Fl_Preferences  Fl_File_ChooserModified:
+ 
+ const char  *Fl_File_ChooserModified::add_favorites_label = "Add to Favorites";
+ const char  *Fl_File_ChooserModified::all_files_label = "All Files (*)";
++#if 0
+ const char  *Fl_File_ChooserModified::custom_filter_label = "Custom Filter";
++#else
++#  define custom_filter_label		"Custom Filter"
++#endif
+ const char  *Fl_File_ChooserModified::existing_file_label = "Please choose an existing file!";
+ const char  *Fl_File_ChooserModified::favorites_label = "Favorites";
+ const char  *Fl_File_ChooserModified::filename_label = "Filename:";
+@@ -88,7 +92,11 @@ const char  *Fl_File_ChooserModified::fi
+ const char  *Fl_File_ChooserModified::filesystems_label = "File Systems";
+ #endif // WIN32
+ const char  *Fl_File_ChooserModified::manage_favorites_label = "Manage Favorites";
++#if 0
+ const char  *Fl_File_ChooserModified::new_directory_label = "New Directory?";
++#else
++#  define new_directory_label		"New Directory?"
++#endif
+ const char  *Fl_File_ChooserModified::preview_label = "Preview";
+ const char  *Fl_File_ChooserModified::show_label = "Show:";
+ Fl_File_Sort_F  *Fl_File_ChooserModified::sort = fl_numericsort;
+@@ -521,7 +529,7 @@ Fl_File_ChooserModified::fileNameCB()
+     else
+     {
+       // File doesn't exist, so beep at and alert the user...
+-      fl_alert(existing_file_label);
++      fl_alert("%s", existing_file_label);
+     }
+   }
+   else if (Fl::event_key() != FL_Delete &&
+diff -p -up InsightApplications-3.16.0/CannyLevelSet/CannySegmentationLevelSet.cxx.orig InsightApplications-3.16.0/CannyLevelSet/CannySegmentationLevelSet.cxx
+--- InsightApplications-3.16.0/CannyLevelSet/CannySegmentationLevelSet.cxx.orig	2010-05-28 17:45:44.791329567 -0300
++++ InsightApplications-3.16.0/CannyLevelSet/CannySegmentationLevelSet.cxx	2010-05-28 17:47:25.122352750 -0300
+@@ -16,7 +16,7 @@
+ =========================================================================*/
+ 
+ #include <CannySegmentationLevelSet.h>
+-#include <FL/fl_file_chooser.H>
++#include <FL/Fl_File_Chooser.H>
+ 
+ 
+ 
+diff -p -up InsightApplications-3.16.0/Curves2DExtractor/ceExtractorConsole.cxx.orig InsightApplications-3.16.0/Curves2DExtractor/ceExtractorConsole.cxx
+--- InsightApplications-3.16.0/Curves2DExtractor/ceExtractorConsole.cxx.orig	2010-05-28 16:22:03.980329594 -0300
++++ InsightApplications-3.16.0/Curves2DExtractor/ceExtractorConsole.cxx	2010-05-28 16:22:12.326326335 -0300
+@@ -17,7 +17,7 @@
+ 
+ 
+ #include "ceExtractorConsole.h"
+-#include <FL/fl_file_chooser.H>
++#include <FL/Fl_File_Chooser.H>
+ #include <FL/fl_ask.H>
+  
+ 
+diff -p -up InsightApplications-3.16.0/Curves3DExtractor/ceExtractorConsole.cxx.orig InsightApplications-3.16.0/Curves3DExtractor/ceExtractorConsole.cxx
+--- InsightApplications-3.16.0/Curves3DExtractor/ceExtractorConsole.cxx.orig	2010-05-28 16:37:01.149328388 -0300
++++ InsightApplications-3.16.0/Curves3DExtractor/ceExtractorConsole.cxx	2010-05-28 16:38:44.126328767 -0300
+@@ -17,7 +17,7 @@
+ 
+ 
+ #include "ceExtractorConsole.h"
+-#include <FL/fl_file_chooser.H>
++#include <FL/Fl_File_Chooser.H>
+ #include <FL/fl_ask.H>
+ #include "itkImageFileWriter.h"
+ #include "itkColorTable.h" 
+@@ -702,7 +702,7 @@ ceExtractorConsole
+     }
+   catch ( itk::ExceptionObject & expt )
+     {
+-    fl_alert( expt.GetDescription() );
++    fl_alert( "%s", expt.GetDescription() );
+     }
+ 
+ 
+diff -p -up InsightApplications-3.16.0/DeformableRegistration3DTimeSeries/DicomImageReader.txx.orig InsightApplications-3.16.0/DeformableRegistration3DTimeSeries/DicomImageReader.txx
+--- InsightApplications-3.16.0/DeformableRegistration3DTimeSeries/DicomImageReader.txx.orig	2010-05-28 17:59:49.318330629 -0300
++++ InsightApplications-3.16.0/DeformableRegistration3DTimeSeries/DicomImageReader.txx	2010-05-28 18:00:42.460327652 -0300
+@@ -3,7 +3,7 @@
+ #include "itkDICOMImageIO2.h"
+ #include "itkImageFileWriter.h"
+ //#include <Fl/Fl_Ask.H>
+-#include <Fl/fl_ask.H>
++#include <FL/fl_ask.H>
+ 
+ namespace ISIS
+ {
+@@ -158,12 +158,12 @@ DicomImageReader<TVolumeType>
+       }
+     catch( itk::ExceptionObject & excp )
+       {
+-      fl_alert( excp.GetDescription() );
++      fl_alert( "%s", excp.GetDescription() );
+       return;
+       }
+     catch( std::exception & excp )
+       {
+-      fl_alert( excp.what() );
++      fl_alert( "%s", excp.what() );
+       return;
+       }
+     catch( ... )
+diff -p -up InsightApplications-3.16.0/DicomImageViewer/DicomImageViewer.cxx.orig InsightApplications-3.16.0/DicomImageViewer/DicomImageViewer.cxx
+--- InsightApplications-3.16.0/DicomImageViewer/DicomImageViewer.cxx.orig	2010-05-28 16:14:56.518330200 -0300
++++ InsightApplications-3.16.0/DicomImageViewer/DicomImageViewer.cxx	2010-05-28 16:15:22.862651689 -0300
+@@ -21,7 +21,7 @@
+ 
+ #include "fltkImage2DViewer.h"
+ 
+-#include "FL/fl_file_chooser.H"
++#include "FL/Fl_File_Chooser.H"
+ 
+ 
+ int usage(void)
+diff -p -up InsightApplications-3.16.0/DistanceMapFilter/DistanceMapFilterBase.cxx.orig InsightApplications-3.16.0/DistanceMapFilter/DistanceMapFilterBase.cxx
+--- InsightApplications-3.16.0/DistanceMapFilter/DistanceMapFilterBase.cxx.orig	2010-05-28 16:02:35.287826765 -0300
++++ InsightApplications-3.16.0/DistanceMapFilter/DistanceMapFilterBase.cxx	2010-05-28 16:03:23.505326651 -0300
+@@ -9,7 +9,7 @@
+ 
+ 
+ #include "DistanceMapFilterBase.h"
+-#include "FL/fl_file_chooser.H"
++#include "FL/Fl_File_Chooser.H"
+ #include "FL/fl_ask.H"
+ 
+ #include <iostream>  
+diff -p -up InsightApplications-3.16.0/DistanceMapFilter/DistanceMapFilter.cxx.orig InsightApplications-3.16.0/DistanceMapFilter/DistanceMapFilter.cxx
+--- InsightApplications-3.16.0/DistanceMapFilter/DistanceMapFilter.cxx.orig	2010-05-28 16:12:30.817329919 -0300
++++ InsightApplications-3.16.0/DistanceMapFilter/DistanceMapFilter.cxx	2010-05-28 16:12:39.447336881 -0300
+@@ -2,7 +2,7 @@
+ 
+ 
+ #include "DistanceMapFilter.h"
+-#include <FL/fl_file_chooser.H>
++#include <FL/Fl_File_Chooser.H>
+ #include "FL/fl_ask.H"
+ 
+ 
+diff -p -up InsightApplications-3.16.0/DuctExtractor/DuctExtractorConsole.cxx.orig InsightApplications-3.16.0/DuctExtractor/DuctExtractorConsole.cxx
+--- InsightApplications-3.16.0/DuctExtractor/DuctExtractorConsole.cxx.orig	2010-05-28 17:16:30.431326510 -0300
++++ InsightApplications-3.16.0/DuctExtractor/DuctExtractorConsole.cxx	2010-05-28 17:16:40.210656842 -0300
+@@ -17,7 +17,7 @@
+ 
+ 
+ #include "DuctExtractorConsole.h"
+-#include <FL/fl_file_chooser.H>
++#include <FL/Fl_File_Chooser.H>
+ #include "itkExceptionObject.h"
+  
+ 
+diff -p -up InsightApplications-3.16.0/FastMarchingLevelSet/FastMarchingLevelSet.cxx.orig InsightApplications-3.16.0/FastMarchingLevelSet/FastMarchingLevelSet.cxx
+--- InsightApplications-3.16.0/FastMarchingLevelSet/FastMarchingLevelSet.cxx.orig	2010-05-28 17:49:19.560329974 -0300
++++ InsightApplications-3.16.0/FastMarchingLevelSet/FastMarchingLevelSet.cxx	2010-05-28 17:49:27.849342709 -0300
+@@ -16,7 +16,7 @@
+ =========================================================================*/
+ 
+ #include <FastMarchingLevelSet.h>
+-#include <FL/fl_file_chooser.H>
++#include <FL/Fl_File_Chooser.H>
+ 
+ 
+ 
+diff -p -up InsightApplications-3.16.0/GaussianFilter/liFilterConsole2D.cxx.orig InsightApplications-3.16.0/GaussianFilter/liFilterConsole2D.cxx
+--- InsightApplications-3.16.0/GaussianFilter/liFilterConsole2D.cxx.orig	2010-05-28 16:17:15.071326911 -0300
++++ InsightApplications-3.16.0/GaussianFilter/liFilterConsole2D.cxx	2010-05-28 16:17:22.553532913 -0300
+@@ -17,7 +17,7 @@
+ 
+ 
+ #include <liFilterConsole2D.h>
+-#include <FL/fl_file_chooser.H>
++#include <FL/Fl_File_Chooser.H>
+ #include "itkExceptionObject.h"
+  
+ 
+diff -p -up InsightApplications-3.16.0/GaussianFilter/liFilterConsole.cxx.orig InsightApplications-3.16.0/GaussianFilter/liFilterConsole.cxx
+--- InsightApplications-3.16.0/GaussianFilter/liFilterConsole.cxx.orig	2010-05-28 16:16:10.207328651 -0300
++++ InsightApplications-3.16.0/GaussianFilter/liFilterConsole.cxx	2010-05-28 16:16:18.966326053 -0300
+@@ -17,7 +17,7 @@
+ 
+ 
+ #include <liFilterConsole.h>
+-#include <FL/fl_file_chooser.H>
++#include <FL/Fl_File_Chooser.H>
+ #include "itkExceptionObject.h"
+  
+ 
+diff -p -up InsightApplications-3.16.0/GeodesicActiveContour/GeodesicActiveContourBase.cxx.orig InsightApplications-3.16.0/GeodesicActiveContour/GeodesicActiveContourBase.cxx
+--- InsightApplications-3.16.0/GeodesicActiveContour/GeodesicActiveContourBase.cxx.orig	2010-05-28 17:52:14.633330569 -0300
++++ InsightApplications-3.16.0/GeodesicActiveContour/GeodesicActiveContourBase.cxx	2010-05-28 17:52:36.729325921 -0300
+@@ -276,7 +276,7 @@ GeodesicActiveContourBase
+     }
+   catch( itk::ExceptionObject & exp )
+     {
+-    fl_alert( exp.GetDescription() );
++    fl_alert( "%s", exp.GetDescription() );
+     }
+ 
+ }
+diff -p -up InsightApplications-3.16.0/GeodesicActiveContour/GeodesicActiveContour.cxx.orig InsightApplications-3.16.0/GeodesicActiveContour/GeodesicActiveContour.cxx
+--- InsightApplications-3.16.0/GeodesicActiveContour/GeodesicActiveContour.cxx.orig	2010-05-28 17:53:53.283330262 -0300
++++ InsightApplications-3.16.0/GeodesicActiveContour/GeodesicActiveContour.cxx	2010-05-28 17:54:03.017791360 -0300
+@@ -16,7 +16,7 @@
+ =========================================================================*/
+ 
+ #include <GeodesicActiveContour.h>
+-#include <FL/fl_file_chooser.H>
++#include <FL/Fl_File_Chooser.H>
+ 
+ 
+ 
+diff -p -up InsightApplications-3.16.0/ImageColorViewer/ImageColorViewer.cxx.orig InsightApplications-3.16.0/ImageColorViewer/ImageColorViewer.cxx
+--- InsightApplications-3.16.0/ImageColorViewer/ImageColorViewer.cxx.orig	2010-05-28 18:05:16.857330118 -0300
++++ InsightApplications-3.16.0/ImageColorViewer/ImageColorViewer.cxx	2010-05-28 18:05:25.386849173 -0300
+@@ -22,7 +22,7 @@
+ 
+ #include <FL/Fl.H>
+ #include <FL/Fl_Window.H>
+-#include <FL/fl_file_chooser.H>
++#include <FL/Fl_File_Chooser.H>
+ #include <GLColorSliceView.h>
+ #include <GLSliceView.h>
+ #include <SliceView.h>
+diff -p -up InsightApplications-3.16.0/ImageRegistration2D/ImageRegistrationConsole.cxx.orig InsightApplications-3.16.0/ImageRegistration2D/ImageRegistrationConsole.cxx
+--- InsightApplications-3.16.0/ImageRegistration2D/ImageRegistrationConsole.cxx.orig	2010-05-28 18:03:20.946327122 -0300
++++ InsightApplications-3.16.0/ImageRegistration2D/ImageRegistrationConsole.cxx	2010-05-28 18:03:29.666646591 -0300
+@@ -18,7 +18,7 @@
+ //
+ 
+ #include <ImageRegistrationConsole.h>
+-#include <FL/fl_file_chooser.H>
++#include <FL/Fl_File_Chooser.H>
+ #include "time.h"
+ #include <iostream>
+ 
+diff -p -up InsightApplications-3.16.0/ImageRegistration/liImageRegistrationConsole.cxx.orig InsightApplications-3.16.0/ImageRegistration/liImageRegistrationConsole.cxx
+--- InsightApplications-3.16.0/ImageRegistration/liImageRegistrationConsole.cxx.orig	2010-05-28 17:33:54.236330136 -0300
++++ InsightApplications-3.16.0/ImageRegistration/liImageRegistrationConsole.cxx	2010-05-28 17:34:02.574638085 -0300
+@@ -17,7 +17,7 @@
+ 
+ 
+ #include <liImageRegistrationConsole.h>
+-#include <FL/fl_file_chooser.H>
++#include <FL/Fl_File_Chooser.H>
+  
+ 
+ 
+diff -p -up InsightApplications-3.16.0/LiverTumorSegmentation/DicomImageReader.txx.orig InsightApplications-3.16.0/LiverTumorSegmentation/DicomImageReader.txx
+--- InsightApplications-3.16.0/LiverTumorSegmentation/DicomImageReader.txx.orig	2010-05-28 17:55:40.955330097 -0300
++++ InsightApplications-3.16.0/LiverTumorSegmentation/DicomImageReader.txx	2010-05-28 17:58:28.940709235 -0300
+@@ -3,7 +3,7 @@
+ #include "itkDICOMImageIO2.h"
+ 
+ //#include <Fl/Fl_Ask.H>
+-#include <Fl/fl_ask.H>
++#include <FL/fl_ask.H>
+ 
+ namespace ISIS
+ {
+@@ -125,12 +125,12 @@ std::cout << "selectedSerie " << selecte
+     }
+   catch( itk::ExceptionObject & excp )
+     {
+-    fl_alert( excp.GetDescription() );
++    fl_alert( "%s", excp.GetDescription() );
+     return;
+     }
+   catch( std::exception & excp )
+     {
+-    fl_alert( excp.what() );
++    fl_alert( "%s", excp.what() );
+     return;
+     }
+   catch( ... )
+diff -p -up InsightApplications-3.16.0/Morphogenesis/CellsViewerBase.cxx.orig InsightApplications-3.16.0/Morphogenesis/CellsViewerBase.cxx
+--- InsightApplications-3.16.0/Morphogenesis/CellsViewerBase.cxx.orig	2010-05-28 17:20:18.567329649 -0300
++++ InsightApplications-3.16.0/Morphogenesis/CellsViewerBase.cxx	2010-05-28 17:24:22.994326012 -0300
+@@ -20,7 +20,7 @@
+ #endif
+ 
+ #include "CellsViewerBase.h"
+-#include <FL/fl_file_chooser.H>
++#include <FL/Fl_File_Chooser.H>
+ #include <FL/fl_ask.H>
+ 
+ namespace bio {
+@@ -500,7 +500,7 @@ CellsViewerBase
+     message += ex.GetLocation();
+     message += "\n";
+     message += ex.GetDescription();
+-    fl_alert( message.c_str() );
++    fl_alert( "%s", message.c_str() );
+     return;
+   }
+   
+diff -p -up InsightApplications-3.16.0/MutualInformationEuler2DRegistration/RegisterWindow.cxx.orig InsightApplications-3.16.0/MutualInformationEuler2DRegistration/RegisterWindow.cxx
+--- InsightApplications-3.16.0/MutualInformationEuler2DRegistration/RegisterWindow.cxx.orig	2010-05-28 17:28:12.718330317 -0300
++++ InsightApplications-3.16.0/MutualInformationEuler2DRegistration/RegisterWindow.cxx	2010-05-28 17:28:18.580325722 -0300
+@@ -1,7 +1,7 @@
+ #include "time.h"
+ 
+ #include <RegisterWindow.h>
+-#include <FL/fl_file_chooser.H>
++#include <FL/Fl_File_Chooser.H>
+ #include "itkTimeProbe.h"
+ 
+ RegisterWindow::RegisterWindow()
+diff -p -up InsightApplications-3.16.0/RegionGrowingSegmentation/RegionGrowingSegmentation2D.cxx.orig InsightApplications-3.16.0/RegionGrowingSegmentation/RegionGrowingSegmentation2D.cxx
+--- InsightApplications-3.16.0/RegionGrowingSegmentation/RegionGrowingSegmentation2D.cxx.orig	2010-05-28 17:39:40.720329915 -0300
++++ InsightApplications-3.16.0/RegionGrowingSegmentation/RegionGrowingSegmentation2D.cxx	2010-05-28 17:39:47.422325571 -0300
+@@ -16,7 +16,7 @@
+   =========================================================================*/
+ 
+   #include <RegionGrowingSegmentation2D.h>
+-  #include <FL/fl_file_chooser.H>
++  #include <FL/Fl_File_Chooser.H>
+ 
+ 
+ 
+diff -p -up InsightApplications-3.16.0/RegionGrowingSegmentation/RegionGrowingSegmentation.cxx.orig InsightApplications-3.16.0/RegionGrowingSegmentation/RegionGrowingSegmentation.cxx
+--- InsightApplications-3.16.0/RegionGrowingSegmentation/RegionGrowingSegmentation.cxx.orig	2010-05-28 17:38:18.272326758 -0300
++++ InsightApplications-3.16.0/RegionGrowingSegmentation/RegionGrowingSegmentation.cxx	2010-05-28 17:38:25.564326343 -0300
+@@ -16,7 +16,7 @@
+ =========================================================================*/
+ 
+ #include <RegionGrowingSegmentation.h>
+-#include <FL/fl_file_chooser.H>
++#include <FL/Fl_File_Chooser.H>
+ 
+ 
+ 
+diff -p -up InsightApplications-3.16.0/SegmentationEditorFltkGui/AnisotropicDiffusionFltkGui/liFilterConsole2D.cxx.orig InsightApplications-3.16.0/SegmentationEditorFltkGui/AnisotropicDiffusionFltkGui/liFilterConsole2D.cxx
+--- InsightApplications-3.16.0/SegmentationEditorFltkGui/AnisotropicDiffusionFltkGui/liFilterConsole2D.cxx.orig	2010-05-28 19:05:37.833329784 -0300
++++ InsightApplications-3.16.0/SegmentationEditorFltkGui/AnisotropicDiffusionFltkGui/liFilterConsole2D.cxx	2010-05-28 19:05:46.398325991 -0300
+@@ -17,7 +17,7 @@
+ 
+ 
+ #include <liFilterConsole2D.h>
+-#include <FL/fl_file_chooser.H>
++#include <FL/Fl_File_Chooser.H>
+ #include <stdio.h>
+ 
+ /************************************
+diff -p -up InsightApplications-3.16.0/SegmentationEditorFltkGui/AnisotropicDiffusionFltkGui/liFilterConsole3D.cxx.orig InsightApplications-3.16.0/SegmentationEditorFltkGui/AnisotropicDiffusionFltkGui/liFilterConsole3D.cxx
+--- InsightApplications-3.16.0/SegmentationEditorFltkGui/AnisotropicDiffusionFltkGui/liFilterConsole3D.cxx.orig	2010-05-28 19:11:22.848330013 -0300
++++ InsightApplications-3.16.0/SegmentationEditorFltkGui/AnisotropicDiffusionFltkGui/liFilterConsole3D.cxx	2010-05-28 19:11:29.661327529 -0300
+@@ -18,7 +18,7 @@
+ 
+ #include <liFilterConsole3D.h>
+ #include <itkMetaImageIO.h>
+-#include <FL/fl_file_chooser.H>
++#include <FL/Fl_File_Chooser.H>
+ #include <stdio.h>
+ 
+ /************************************
+diff -p -up InsightApplications-3.16.0/SegmentationEditorFltkGui/EditorFltkGui/EditorConsole.cxx.orig InsightApplications-3.16.0/SegmentationEditorFltkGui/EditorFltkGui/EditorConsole.cxx
+--- InsightApplications-3.16.0/SegmentationEditorFltkGui/EditorFltkGui/EditorConsole.cxx.orig	2010-05-28 19:21:45.925330069 -0300
++++ InsightApplications-3.16.0/SegmentationEditorFltkGui/EditorFltkGui/EditorConsole.cxx	2010-05-28 19:21:54.783325661 -0300
+@@ -20,7 +20,7 @@
+ #include <vtkProperty.h>
+ #include <stdio.h>
+ #include <fstream>
+-#include <FL/fl_file_chooser.H>
++#include <FL/Fl_File_Chooser.H>
+ #include <fltkUtils.h>
+ 
+ #ifndef vtkFloatingPointType
+diff -p -up InsightApplications-3.16.0/SegmentationEditorFltkGui/WatershedSegmentationFltkGui/SegmenterConsole3D.cxx.orig InsightApplications-3.16.0/SegmentationEditorFltkGui/WatershedSegmentationFltkGui/SegmenterConsole3D.cxx
+--- InsightApplications-3.16.0/SegmentationEditorFltkGui/WatershedSegmentationFltkGui/SegmenterConsole3D.cxx.orig	2010-05-28 19:18:17.310329965 -0300
++++ InsightApplications-3.16.0/SegmentationEditorFltkGui/WatershedSegmentationFltkGui/SegmenterConsole3D.cxx	2010-05-28 19:18:30.701440679 -0300
+@@ -17,7 +17,7 @@
+ 
+                     
+ #include <SegmenterConsole3D.h>
+-#include <FL/fl_file_chooser.H>
++#include <FL/Fl_File_Chooser.H>
+ #include <stdio.h>
+ #include <fstream>
+ 
+diff -p -up InsightApplications-3.16.0/ShapeDetectionLevelSet/ShapeDetectionLevelSet.cxx.orig InsightApplications-3.16.0/ShapeDetectionLevelSet/ShapeDetectionLevelSet.cxx
+--- InsightApplications-3.16.0/ShapeDetectionLevelSet/ShapeDetectionLevelSet.cxx.orig	2010-05-28 17:50:54.450330715 -0300
++++ InsightApplications-3.16.0/ShapeDetectionLevelSet/ShapeDetectionLevelSet.cxx	2010-05-28 17:51:03.609389808 -0300
+@@ -16,7 +16,7 @@
+ =========================================================================*/
+ 
+ #include <ShapeDetectionLevelSet.h>
+-#include <FL/fl_file_chooser.H>
++#include <FL/Fl_File_Chooser.H>
+ 
+ 
+ 
+diff -p -up InsightApplications-3.16.0/ThresholdSegmentationLevelSetFltkGui/SegmenterConsole.cxx.orig InsightApplications-3.16.0/ThresholdSegmentationLevelSetFltkGui/SegmenterConsole.cxx
+--- InsightApplications-3.16.0/ThresholdSegmentationLevelSetFltkGui/SegmenterConsole.cxx.orig	2010-05-28 17:40:32.872326868 -0300
++++ InsightApplications-3.16.0/ThresholdSegmentationLevelSetFltkGui/SegmenterConsole.cxx	2010-05-28 17:40:34.431327238 -0300
+@@ -15,7 +15,7 @@
+ 
+ =========================================================================*/
+ #include <SegmenterConsole.h>
+-#include <FL/fl_file_chooser.H>
++#include <FL/Fl_File_Chooser.H>
+ #include <FL/fl_ask.H>
+ #include <itkImageFileWriter.h>
+ #include <fstream>
+diff -p -up InsightApplications-3.16.0/ThresholdSegmentationLevelSet/ThresholdSegmentationLevelSet.cxx.orig InsightApplications-3.16.0/ThresholdSegmentationLevelSet/ThresholdSegmentationLevelSet.cxx
+--- InsightApplications-3.16.0/ThresholdSegmentationLevelSet/ThresholdSegmentationLevelSet.cxx.orig	2010-05-28 17:43:48.488330896 -0300
++++ InsightApplications-3.16.0/ThresholdSegmentationLevelSet/ThresholdSegmentationLevelSet.cxx	2010-05-28 17:44:22.682788129 -0300
+@@ -16,7 +16,7 @@
+ =========================================================================*/
+ 
+ #include <ThresholdSegmentationLevelSet.h>
+-#include <FL/fl_file_chooser.H>
++#include <FL/Fl_File_Chooser.H>
+ 
+ 
+ 
+@@ -150,7 +150,7 @@ ThresholdSegmentationLevelSet
+   }
+   catch( itk::ExceptionObject & excp ) 
+   {
+-    fl_alert( excp.GetDescription() );
++    fl_alert( "%s", excp.GetDescription() );
+     controlsGroup->deactivate();
+     return;
+   }
+diff -p -up InsightApplications-3.16.0/VolviewPlugIns/vvITKImageRegistration.cxx.orig InsightApplications-3.16.0/VolviewPlugIns/vvITKImageRegistration.cxx
+--- InsightApplications-3.16.0/VolviewPlugIns/vvITKImageRegistration.cxx.orig	2010-05-27 20:41:03.204328515 -0300
++++ InsightApplications-3.16.0/VolviewPlugIns/vvITKImageRegistration.cxx	2010-05-27 20:41:16.861327756 -0300
+@@ -1,6 +1,7 @@
+ /* perform a pixel-wise intensity transformation using a Normalized Correlation
+  * function */
+ 
++#include <stdio.h>
+ #include "vtkVVPluginAPI.h"
+ 
+ #include "itkCenteredTransformInitializer.h"
+diff -p -up InsightApplications-3.16.0/VolviewPlugIns/vvITKLandmarkWarping.cxx.orig InsightApplications-3.16.0/VolviewPlugIns/vvITKLandmarkWarping.cxx
+--- InsightApplications-3.16.0/VolviewPlugIns/vvITKLandmarkWarping.cxx.orig	2010-05-27 20:46:50.456327012 -0300
++++ InsightApplications-3.16.0/VolviewPlugIns/vvITKLandmarkWarping.cxx	2010-05-27 20:47:06.894326303 -0300
+@@ -1,5 +1,6 @@
+ /* Warps an image using a KernelSpline for interpolating landmark-based displacements */
+ 
++#include <stdio.h>
+ #include "vtkVVPluginAPI.h"
+ 
+ #include "itkImage.h"
+diff -p -up InsightApplications-3.16.0/VoronoiSegmentation/VDSegGrayRun.cxx.orig InsightApplications-3.16.0/VoronoiSegmentation/VDSegGrayRun.cxx
+--- InsightApplications-3.16.0/VoronoiSegmentation/VDSegGrayRun.cxx.orig	2010-05-28 17:36:29.381329299 -0300
++++ InsightApplications-3.16.0/VoronoiSegmentation/VDSegGrayRun.cxx	2010-05-28 17:36:39.506444524 -0300
+@@ -16,7 +16,7 @@
+ =========================================================================*/
+ 
+ #include "VDSegGrayRun.h"
+-#include <FL/fl_file_chooser.H>
++#include <FL/Fl_File_Chooser.H>
+ #include <FL/Fl_Int_Input.H>
+ #include <fstream>
+ #include <iostream>
+diff -p -up InsightApplications-3.16.0/VoronoiSegmentation/VDSegGrayRun.h.orig InsightApplications-3.16.0/VoronoiSegmentation/VDSegGrayRun.h
+--- InsightApplications-3.16.0/VoronoiSegmentation/VDSegGrayRun.h.orig	2010-05-28 17:35:50.875329961 -0300
++++ InsightApplications-3.16.0/VoronoiSegmentation/VDSegGrayRun.h	2010-05-28 17:36:02.896326151 -0300
+@@ -15,7 +15,7 @@
+ 
+ =========================================================================*/
+ 
+-#include <FL/fl_file_chooser.H>
++#include <FL/Fl_File_Chooser.H>
+ #include "fltkImageViewer.h"
+ #include "GLSliceView.h"
+ #include "itkVoronoiSegmentationImageFilter.h"
+diff -p -up InsightApplications-3.16.0/vtkITK/Common/CMakeLists.txt.orig InsightApplications-3.16.0/vtkITK/Common/CMakeLists.txt
+--- InsightApplications-3.16.0/vtkITK/Common/CMakeLists.txt.orig	2010-05-28 20:48:45.071330055 -0300
++++ InsightApplications-3.16.0/vtkITK/Common/CMakeLists.txt	2010-05-28 20:48:51.178326697 -0300
+@@ -86,8 +86,8 @@ IF (VTK_WRAP_PYTHON)
+   INSTALL_TARGETS(/lib vtkVTKITKCommonPython)
+   TARGET_LINK_LIBRARIES (vtkVTKITKCommonPython
+                          vtkVTKITKCommon
+-                         vtkFilteringPython
+-                         vtkCommonPython)
++                         vtkFilteringPythonD
++                         vtkCommonPythonD)
+ ENDIF (VTK_WRAP_PYTHON)
+ 
+ IF(BORLAND)
