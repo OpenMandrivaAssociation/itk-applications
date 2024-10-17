@@ -10,7 +10,7 @@ Version:	%{version}
 Release:	%{release}
 License:	BSDish
 Group:		Sciences/Other
-URL:		http://www.itk.org
+URL:		https://www.itk.org
 Source0:	http://belnet.dl.sourceforge.net/sourceforge/itk/InsightApplications-%{version}.tar.gz
 BuildRequires:	cableswig
 BuildRequires:	cmake
